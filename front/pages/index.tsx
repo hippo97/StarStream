@@ -1,11 +1,47 @@
-import type { NextPage } from 'next';
+import { gql } from 'apollo-boost';
+import Link from 'next/link';
+import * as React from 'react';
+import { Mutation } from 'react-apollo';
+import Layout from '../Components/Layout';
 
-const Home: NextPage = () => {
+const IndexPage: React.FunctionComponent = () => {
   return (
-    <div>
-      <h1>Hello Star Stream!</h1>
-    </div>
+    <Layout title="Home | StarStream">
+      <h1>hello 👋</h1>
+      <p>
+        <Link href="/about">
+          <a>About</a>
+        </Link>
+      </p>
+      <Mutation
+        mutation={gql`
+          mutation {
+            login(
+              email: "test@test.com"
+              password: "qqq"
+            ) {
+              id
+              firstName
+              lastName
+              email
+              name
+            }
+          }
+        `}
+      >
+        {(mutate) => (
+          <button
+            onClick={async () => {
+              const response = await mutate();
+              console.log(response);
+            }}
+          >
+            call login mutation
+          </button>
+        )}
+      </Mutation>
+    </Layout>
   );
 };
 
-export default Home;
+export default IndexPage;

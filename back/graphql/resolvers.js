@@ -1,23 +1,42 @@
-import user from '../db/models/user';
-import StatusCode from '../Constants/StatusCode';
-
 const resolvers = {
   Query: {
-    users: async () => {
-      const result = await user.selectAll();
-      return result.data;
+    getUserData: async () => {
+      const getUsers = await User.findAll();
+      return getUsers;
+    },
+    getAllUser: async (_, args) => {
+      await context.User.findOne();
+      console.log(args);
+      const { id } = args;
+      const resultData = await User.findOne({ where: { id: id } });
+      return resultData;
     },
   },
-
   Mutation: {
-    addUser: async (_, { userId, userName }) => {
-      const result = await user.insert(
-        userId,
-        userName
+    createUser: async (_, { firstName, lastName, password }) => {
+      const newUser = await User.create({
+        firstName,
+        lastName,
+        password,
+      });
+
+      const user = await User.findOne({ where: { id: id } });
+      return user;
+    },
+    updateUser: async (_, { id, firstName, lastName, password }) => {
+      console.log(id);
+      const oldUser = await User.update(
+        { firstName, lastName, password },
+        { where: { id: id } }
       );
-      return result.code === StatusCode.OK
-        ? true
-        : false;
+      const user = await User.findOne({ where: { id: id } });
+      return user;
+    },
+    deleteUser: async (_, { id }) => {
+      console.log(id);
+      const oldUser = await User.destroy({ where: { id: id } });
+      const user = await User.findOne({ where: { id: id } });
+      return user;
     },
   },
 };

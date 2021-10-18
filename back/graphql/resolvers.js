@@ -1,3 +1,5 @@
+const { User } = require("../models");
+
 const resolvers = {
   Query: {
     getUserData: async () => {
@@ -13,15 +15,19 @@ const resolvers = {
     },
   },
   Mutation: {
-    createUser: async (_, { firstName, lastName, password }) => {
+    createUser: async (_, { email, password }) => {
+      const user = await User.findOne({ where: { id: email } });
+      if (user) {
+        //이미 데이터베이스에 아이디가 존재하면
+        return null;
+      }
+
       const newUser = await User.create({
-        firstName,
-        lastName,
+        email,
         password,
       });
 
-      const user = await User.findOne({ where: { id: id } });
-      return user;
+      return newUser;
     },
     updateUser: async (_, { id, firstName, lastName, password }) => {
       console.log(id);

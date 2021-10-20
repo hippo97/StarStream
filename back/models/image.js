@@ -1,22 +1,19 @@
 const DataTypes = require("sequelize");
 const { Model } = DataTypes;
 
-module.exports = class User extends Model {
+module.exports = class Image extends Model {
   static init(sequelize) {
     return super.init(
       {
-        email: {
-          type: DataTypes.STRING(40),
-          allowNull: false,
-        },
-        password: {
-          type: DataTypes.STRING(100),
+        // id가 기본적으로 들어있다.
+        src: {
+          type: DataTypes.STRING(200),
           allowNull: false,
         },
       },
       {
-        modelName: "User",
-        tableName: "users",
+        modelName: "Image",
+        tableName: "images",
         charset: "utf8",
         collate: "utf8_general_ci",
         sequelize,
@@ -24,7 +21,6 @@ module.exports = class User extends Model {
     );
   }
   static associate(db) {
-    db.User.hasMany(db.Post);
-    db.User.hasMany(db.Comment);
+    db.Image.belongsTo(db.Post);
   }
 };

@@ -6,11 +6,8 @@ const resolvers = {
       const getUsers = await User.findAll();
       return getUsers;
     },
-    getAllUser: async (_, args) => {
-      await context.User.findOne();
-      console.log(args);
-      const { id } = args;
-      const resultData = await User.findOne({ where: { id: id } });
+    getAllUser: async () => {
+      const resultData = await User.findAll();
       return resultData;
     },
   },

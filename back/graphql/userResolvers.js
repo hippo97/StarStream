@@ -2,9 +2,9 @@ const { User } = require("../models");
 
 const resolvers = {
   Query: {
-    getUserData: async () => {
-      const getUsers = await User.findAll();
-      return getUsers;
+    getUser: async (_, { email }) => {
+      const getUser = await User.findOne({ where: { email: email } });
+      return getUser;
     },
     getAllUser: async () => {
       const resultData = await User.findAll();

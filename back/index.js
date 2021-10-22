@@ -2,9 +2,10 @@ const express = require("express");
 
 const PORT = 3030;
 const path = "/";
-const { ApolloServer, gql } = require("apollo-server-express");
+const { ApolloServer } = require("apollo-server-express");
 const { User } = require("./models/index");
 
+const context = require("./graphql/context");
 const schema = require("./graphql");
 
 User.sequelize
@@ -18,7 +19,10 @@ User.sequelize
 
 async function startApolloServer() {
   const app = express();
-  const server = new ApolloServer({ schema });
+  const server = new ApolloServer({
+    schema,
+    context,
+  });
   await server.start();
   server.applyMiddleware({ app, path });
 

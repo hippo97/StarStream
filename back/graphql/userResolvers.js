@@ -24,23 +24,30 @@ const resolvers = {
     },
   },
   Mutation: {
-    signup: async (_, { email, password }) => {
-      const user = await User.findOne({ where: { email: email } });
-      if (user) {
-        //이미 데이터베이스에 아이디가 존재하면
-        return false;
-      }
+    createUser: async (_, { email, password }) => {
+      // const user = await User.findOne({ where: { email: email } });
+      // if (user) {
+      //   //이미 데이터베이스에 아이디가 존재하면
+      //   return false;
+      // }
+      // console.log(user);
 
-      bcrypt.hash(password, 10, async (err, hashpw) => {
-        await User.create({
-          email,
-          hashpw,
-          type: "user",
-          token: "",
-        });
-      });
+      // bcrypt.hash(password, 10, async (err, password) => {
+      //   await User.create({
+      //     email,
+      //     password,
+      //     type: "user",
+      //     token: "",
+      //   });
+      // });
 
-      return true;
+      return null;
+    },
+    deleteUser: async (_, { id }) => {
+      console.log(id);
+      const oldUser = await User.destroy({ where: { id: id } });
+      const user = await User.findOne({ where: { id: id } });
+      return user;
     },
     login: async (_, { email, pwssword }) => {
       const user = await User.findOne({ where: { email: email } });
@@ -68,12 +75,6 @@ const resolvers = {
         { firstName, lastName, password },
         { where: { id: id } }
       );
-      const user = await User.findOne({ where: { id: id } });
-      return user;
-    },
-    deleteUser: async (_, { id }) => {
-      console.log(id);
-      const oldUser = await User.destroy({ where: { id: id } });
       const user = await User.findOne({ where: { id: id } });
       return user;
     },

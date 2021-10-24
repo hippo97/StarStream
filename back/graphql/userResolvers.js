@@ -2,9 +2,9 @@ const { User } = require("../models");
 
 const resolvers = {
   Query: {
-    getUserData: async () => {
-      const getUsers = await User.findAll();
-      return getUsers;
+    getUser: async (_, { email }) => {
+      const user = await User.findOne({ where: { email: email } });
+      return user;
     },
     getAllUser: async () => {
       const resultData = await User.findAll();
@@ -13,15 +13,19 @@ const resolvers = {
   },
   Mutation: {
     createUser: async (_, { email, password }) => {
-      const user = await User.findOne({ where: { id: email } });
+      const user = await User.findOne({ where: { email: email } });
       if (user) {
         //이미 데이터베이스에 아이디가 존재하면
-        return null;
+        return user;
       }
+      console.log(user);
 
+      const hashpw = await bcrypt.hash(password, 10);
       const newUser = await User.create({
         email,
-        password,
+        hashpw,
+        token: "",
+        type: "user",
       });
 
       return newUser;

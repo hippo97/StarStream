@@ -10,4 +10,4 @@ const context = async ({ req }) => {
   return { user };
 };
 
-export default context;
+module.exports = context;

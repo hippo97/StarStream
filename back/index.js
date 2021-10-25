@@ -3,12 +3,12 @@ const express = require("express");
 const PORT = 3030;
 const path = "/";
 const { ApolloServer } = require("apollo-server-express");
-const { User } = require("./models/index");
+const db = require("./models");
 
 const context = require("./graphql/context");
 const schema = require("./graphql");
 
-User.sequelize
+db.sequelize
   .sync()
   .then(() => {
     console.log("sequelize success");

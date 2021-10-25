@@ -15,11 +15,11 @@ module.exports = class User extends Model {
         },
         type: {
           type: DataTypes.STRING(10),
-          allowNull: false,
+          allowNull: true,
         },
         token: {
           type: DataTypes.STRING(50),
-          allowNull: false,
+          allowNull: true,
         },
       },
       {

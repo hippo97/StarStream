@@ -7,7 +7,7 @@ const context = async ({ req }) => {
 
   const users = await User.findAll();
   const user = users.find((user) => user.token === token);
-  return { user };
+  return user;
 };
 
 export default context;

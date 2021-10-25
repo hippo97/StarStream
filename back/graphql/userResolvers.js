@@ -24,24 +24,30 @@ const resolvers = {
     },
   },
   Mutation: {
-    createUser: async (_, { email, password }) => {
+    createUser: async (_, args) => {
       // const user = await User.findOne({ where: { email: email } });
       // if (user) {
       //   //이미 데이터베이스에 아이디가 존재하면
-      //   return false;
+      //   return user;
       // }
       // console.log(user);
 
-      // bcrypt.hash(password, 10, async (err, password) => {
-      //   await User.create({
-      //     email,
-      //     password,
-      //     type: "user",
-      //     token: "",
-      //   });
+      const hashpw = await bcrypt.hash(args.password, 10);
+      // await User.create({
+      //   email: email,
+      //   password: hashpw,
+      //   type: "user",
+      //   token: "",
       // });
 
-      return null;
+      // const newUser = await User.findOne({ where: { email: email } });
+      const newUser = await User.create({
+        email: args.email,
+        password: hashpw,
+        type: "user",
+        token: "",
+      });
+      return newUser;
     },
     deleteUser: async (_, { id }) => {
       console.log(id);
@@ -80,5 +86,4 @@ const resolvers = {
     },
   },
 };
-
 module.exports = resolvers;

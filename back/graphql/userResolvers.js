@@ -4,15 +4,13 @@ const {
 } = require("apollo-server-express");
 const { User } = require("../models");
 const bcrypt = require("bcrypt");
-const sha256 = require("crypto-js/sha256");
 
 const resolvers = {
   Query: {
-    getUser: async (_, { email }) => {
-      const user = await User.findOne({ where: { email: email } });
-      if (!user) throw new AuthenticationError("Not Authenticated");
-
-      return user;
+    getUser: async (_, args) => {
+      const getUser = await User.findOne({ where: { id: args.id } });
+      if (!getUser) throw new AuthenticationError("Not Authenticated");
+      return getUser;
     },
     getAllUser: async (_, { email }) => {
       const user = await User.findOne({ where: { email: email } });
@@ -24,64 +22,40 @@ const resolvers = {
     },
   },
   Mutation: {
-    createUser: async (_, args) => {
-      // const user = await User.findOne({ where: { email: email } });
-      // if (user) {
-      //   //이미 데이터베이스에 아이디가 존재하면
-      //   return user;
-      // }
-      // console.log(user);
+    createUser: async (_, { email, password }) => {
+      const user = await User.findOne({ where: { email: email } });
+      if (user) {
+        //이미 데이터베이스에 아이디가 존재하면
+        return null;
+      }
 
-      const hashpw = await bcrypt.hash(args.password, 10);
-      // await User.create({
-      //   email: email,
-      //   password: hashpw,
-      //   type: "user",
-      //   token: "",
-      // });
+      const hashpw = await bcrypt.hash(password, 10);
 
-      // const newUser = await User.findOne({ where: { email: email } });
       const newUser = await User.create({
-        email: args.email,
+        email,
         password: hashpw,
         type: "user",
-        token: "",
+        token: null,
       });
       return newUser;
     },
-    deleteUser: async (_, { id }) => {
-      console.log(id);
-      const oldUser = await User.destroy({ where: { id: id } });
-      const user = await User.findOne({ where: { id: id } });
-      return user;
-    },
-    login: async (_, { email, pwssword }) => {
-      const user = await User.findOne({ where: { email: email } });
-
-      if (!user) return null; //해당 유저 없음
-      if (user.token) return null; //해당 유저가 이미 로그인한 상태일때
-      if (!bcrypt.compareSync(password, user.password)) return null; //비밀번호 일치X
-
-      user.token = sha256(rand(160, 36) + email + password).toString();
-      return user;
-    },
-    logout: async (_, { email }) => {
-      const user = await User.findOne({ where: { email: email } });
-      if (user?.token) {
-        //로그인 상태(토큰 존재)
-        user.token = "";
-        return true;
+    updateUser: async (_, args) => {
+      const user = await User.findOne({ where: { email: args.email } });
+      if (user === null) {
+        //만약 유저가 없다면
+        return null;
       }
-
-      throw new AuthenticationError("Not Authenticated"); //로그인 하지 않은 상태이거나 토큰이 없는 경우
-    },
-    updateUser: async (_, { id, firstName, lastName, password }) => {
-      console.log(id);
-      const oldUser = await User.update(
-        { firstName, lastName, password },
-        { where: { id: id } }
+      await User.update(
+        { password: args.password },
+        { where: { email: args.email } }
       );
-      const user = await User.findOne({ where: { id: id } });
+
+      return user;
+    },
+    deleteUser: async (_, args) => {
+      const user = await User.findOne({ where: { email: args.email } });
+      await User.destroy({ where: { email: args.email } });
+
       return user;
     },
   },

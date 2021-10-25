@@ -2,8 +2,8 @@ const express = require("express");
 
 const PORT = 3030;
 const path = "/";
-const { ApolloServer } = require("apollo-server-express");
-const db = require("./models");
+const { ApolloServer, gql } = require("apollo-server-express");
+const db = require("./models/index");
 
 const context = require("./graphql/context");
 const schema = require("./graphql");

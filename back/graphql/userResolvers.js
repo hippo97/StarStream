@@ -12,11 +12,7 @@ const resolvers = {
       if (!getUser) throw new AuthenticationError("Not Authenticated");
       return getUser;
     },
-    getAllUser: async (_, { email }) => {
-      const user = await User.findOne({ where: { email: email } });
-      if (!user) throw new AuthenticationError("Not Authenticated");
-      if (user.type !== "admin") throw new ForbiddenError("Not Authorized");
-
+    getAllUser: async () => {
       const users = await User.findAll();
       return users;
     },

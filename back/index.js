@@ -5,8 +5,8 @@ const path = "/";
 const { ApolloServer, gql } = require("apollo-server-express");
 const db = require("./models/index");
 
-const context = require("./graphql/context");
 const schema = require("./graphql");
+const context = require("./graphql/context/context");
 
 db.sequelize
   .sync()
@@ -21,7 +21,6 @@ async function startApolloServer() {
   const app = express();
   const server = new ApolloServer({
     schema,
-    context,
   });
   await server.start();
   server.applyMiddleware({ app, path });

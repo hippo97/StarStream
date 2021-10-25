@@ -1,4 +1,4 @@
-const User = require("../models");
+const User = require("../../models");
 
 const context = async ({ req }) => {
   const token = req.headers.authorization || "";
@@ -10,4 +10,4 @@ const context = async ({ req }) => {
   return user;
 };
 
-export default context;
+module.exports = context;

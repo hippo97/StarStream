@@ -1,15 +1,17 @@
 type User {
   email: String!
   password: String!
+  type: String!
+  token: String
 }
 
 type Query {
-  getUserData: [User!]!
+  getUser(id: Int!): User
   getAllUser: [User!]!
 }
 
 type Mutation {
   createUser(email: String!, password: String!): User
-  updateUser(email: String!, password: String!): User!
+  updateUser(email: String!, password: String!): User
   deleteUser(email: String!): User
 }

@@ -3,9 +3,9 @@ const bcrypt = require("bcrypt");
 
 const resolvers = {
   Query: {
-    getUserData: async () => {
-      const getUsers = await User.findAll();
-      return getUsers;
+    getUser: async (_, args) => {
+      const getUser = await User.findOne({ where: { id: args.id } });
+      return getUser;
     },
     getAllUser: async () => {
       const resultData = await User.findAll();
@@ -28,22 +28,25 @@ const resolvers = {
         type: "user",
         token: null,
       });
-
       return newUser;
     },
-    updateUser: async (_, { id, firstName, lastName, password }) => {
-      console.log(id);
-      const oldUser = await User.update(
-        { firstName, lastName, password },
-        { where: { id: id } }
+    updateUser: async (_, args) => {
+      const user = await User.findOne({ where: { email: args.email } });
+      if (user === null) {
+        //만약 유저가 없다면
+        return null;
+      }
+      await User.update(
+        { password: args.password },
+        { where: { email: args.email } }
       );
-      const user = await User.findOne({ where: { id: id } });
+
       return user;
     },
-    deleteUser: async (_, { id }) => {
-      console.log(id);
-      const oldUser = await User.destroy({ where: { id: id } });
-      const user = await User.findOne({ where: { id: id } });
+    deleteUser: async (_, args) => {
+      const user = await User.findOne({ where: { email: args.email } });
+      await User.destroy({ where: { email: args.email } });
+
       return user;
     },
   },

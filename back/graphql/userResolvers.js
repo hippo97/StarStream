@@ -4,6 +4,7 @@ const {
 } = require("apollo-server-express");
 const { User } = require("../models");
 const bcrypt = require("bcrypt");
+const sha256 = require("crypto-js/sha256");
 
 const resolvers = {
   Query: {
@@ -53,6 +54,37 @@ const resolvers = {
       await User.destroy({ where: { email: args.email } });
 
       return user;
+    },
+    login: async (_, args) => {
+      const user = await User.findOne({ where: { email: args.email } });
+
+      if (!user) return null; //유저가 없을때
+      if (user.token) return null; //이미 로그인 중일때(토큰이 있다는건 로그인중이라는 뜻)
+      if (!bcrypt.compareSync(args.password, user.password)) return null; //비번이 틀렸을때(로그인 시 입력한 비번)
+
+      const newToken = sha256(
+        args.email + args.password + args.email
+      ).toString();
+
+      const updateUser = await User.update(
+        {
+          token: newToken,
+        },
+        {
+          where: { email: args.email },
+        }
+      );
+
+      return updateUser;
+    },
+    logout: async (_, __, context) => {
+      if (context?.token) {
+        //로그인 상태라면
+        await User.update({ token: "" }, { where: { token: context.token } });
+        return true;
+      }
+
+      throw new AuthenticationError("Not Authenticated"); //로그인 X 또는 토큰 없음
     },
   },
 };

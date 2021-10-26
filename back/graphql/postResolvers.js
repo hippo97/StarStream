@@ -37,11 +37,11 @@ const resolvers = {
 
       return newPost;
     },
-    updatePost: async (_, { id, title, content }) => {
+    updatePost: async (_, args) => {
       console.log(id);
       const oldPost = await Post.update(
-        { title, content },
-        { where: { id: id } }
+        { title: args.title, content: args.content },
+        { where: { id: args.id } }
       );
       return oldPost;
     },

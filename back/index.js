@@ -21,6 +21,7 @@ async function startApolloServer() {
   const app = express();
   const server = new ApolloServer({
     schema,
+    context,
   });
   await server.start();
   server.applyMiddleware({ app, path });

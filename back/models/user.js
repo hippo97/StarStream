@@ -18,7 +18,7 @@ module.exports = class User extends Model {
           allowNull: false,
         },
         token: {
-          type: DataTypes.STRING(50),
+          type: DataTypes.STRING(64),
           allowNull: true,
         },
       },

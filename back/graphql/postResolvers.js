@@ -10,19 +10,29 @@ const resolvers = {
       const resultData = await Post.findAll();
       return resultData;
     },
+    getPostsPaginated: async (_, args) => {
+      const results = await Post.findAll({
+        order: [["createdAt", "DESC"]],
+        limit: args.per_page,
+        offset: (args.page - 1) * args.per_page,
+      });
+
+      return results;
+    },
   },
   Mutation: {
-    createPost: async (_, { title, content }) => {
-      const post = await Post.findOne({ where: { title: title } });
-      console.log("hehhs", post);
+    createPost: async (_, args) => {
+      const post = await Post.findOne({ where: { title: args.title } });
+
       if (post) {
         //이미 데이터베이스에 아이디가 존재하면
         return null;
       }
 
       const newPost = await Post.create({
-        title,
-        content,
+        title: args.title,
+        content: args.content,
+        UserId: args.userid,
       });
 
       return newPost;

@@ -1,4 +1,5 @@
 type Post {
+  id: Int!
   title: String!
   content: String!
 }
@@ -6,10 +7,11 @@ type Post {
 type Query {
   getPost(id: Int!): Post!
   getPosts: [Post!]!
+  getPostsPaginated(page: Int!, per_page: Int!): [Post!]!
 }
 
 type Mutation {
-  createPost(title: String!, content: String!): Post!
+  createPost(title: String!, content: String!, userid: Int!): Post
   updatePost(id: Int!, title: String!, content: String!): Post!
   deletePost(id: Int!): Post!
 }

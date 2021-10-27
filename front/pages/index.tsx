@@ -1,8 +1,9 @@
-import { gql } from 'apollo-boost';
-import Link from 'next/link';
-import * as React from 'react';
-import { Mutation } from 'react-apollo';
-import Layout from '../Components/Layout';
+import { gql } from "@apollo-client";
+import client from "../apollo-client";
+import Link from "next/link";
+import * as React from "react";
+import { Mutation } from "react-apollo";
+import Layout from "../Components/Layout";
 
 const IndexPage: React.FunctionComponent = () => {
   return (
@@ -13,35 +14,14 @@ const IndexPage: React.FunctionComponent = () => {
           <a>About</a>
         </Link>
       </p>
-      <Mutation
-        mutation={gql`
-          mutation {
-            login(
-              email: "test@test.com"
-              password: "qqq"
-            ) {
-              id
-              firstName
-              lastName
-              email
-              name
-            }
-          }
-        `}
-      >
-        {(mutate) => (
-          <button
-            onClick={async () => {
-              const response = await mutate();
-              console.log(response);
-            }}
-          >
-            call login mutation
-          </button>
-        )}
-      </Mutation>
     </Layout>
   );
 };
+
+export async function getStaticProps() {
+  const { data } = await client.query({
+    query: gql``,
+  });
+}
 
 export default IndexPage;

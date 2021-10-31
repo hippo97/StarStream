@@ -7,8 +7,10 @@ function Register(props: any) {
   const [errors, setErrors] = useState({});
 
   const { onChange, onSubmit, values } = useForm(registerUser, {
+    username: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
 
   const [addUser, { loading }] = useMutation(REGISTER_USER, {

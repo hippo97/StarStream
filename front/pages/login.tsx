@@ -4,10 +4,8 @@ const LoginPage = () => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
 
-    const onSubmit = () => {
-        
-    }
-    
+  const onSubmit = () => {};
+
   return (
     <div>
       <div>
@@ -23,10 +21,12 @@ const LoginPage = () => {
           id="inputPassword"
           onChange={(v) => setPassword(v.target.value)}
         />
-          </div>
-          <div>
-              <button type="submit" onClick={onSubmit}>
-          </div>
+      </div>
+      <div>
+        <button type="submit" value="로그인" onClick={onSubmit}>
+          로그인
+        </button>
+      </div>
     </div>
   );
 };

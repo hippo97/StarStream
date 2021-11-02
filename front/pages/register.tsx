@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useMutation } from "@apollo/react-hooks";
+import { useMutation } from "@apollo/client";
 import { gql } from "@apollo/client";
 import { useForm } from "../utils/hooks";
 
@@ -13,7 +13,7 @@ function Register(props: any) {
     confirmPassword: "",
   });
 
-  const [addUser, { loading }] = useMutation(REGISTER_USER, {
+  const [addUser, { loading, data }] = useMutation(REGISTER_USER, {
     update(_, result) {
       props.history.push("/");
     },
@@ -23,6 +23,7 @@ function Register(props: any) {
     variables: values,
   });
 
+  console.log(data);
   function registerUser() {
     addUser();
   }

@@ -1,18 +1,8 @@
 import React from "react";
 import App from "./App";
-import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
-
-const client = new ApolloClient({
-  uri: "http://localhost:3030",
-  cache: new InMemoryCache(),
-});
 
 const IndexPage = () => {
-  return (
-    <ApolloProvider client={client}>
-      <App />
-    </ApolloProvider>
-  );
+  return <App />;
 };
 
 export default IndexPage;

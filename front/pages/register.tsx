@@ -13,20 +13,14 @@ function Register(props: any) {
     confirmPassword: "",
   });
 
-  const [addUser, { loading, data }] = useMutation(REGISTER_USER, {
-    update(_, result) {
-      props.history.push("/");
-    },
-    onError(err) {
-      setErrors(err.graphQLErrors[0].extensions.exception.errors);
-    },
-    variables: values,
-  });
+  const [addUser, { loading, data }] = useMutation(REGISTER_USER);
 
   console.log(data);
   function registerUser() {
-    addUser();
+    addUser({ variables: { email: values.email, password: values.password } });
   }
+
+  if (loading) return "Loading...";
 
   return (
     <div className="form-container">

@@ -13,7 +13,7 @@ function Register(props: any) {
     confirmPassword: "",
   });
 
-  const [addUser, { loading, data }] = useMutation(REGISTER_USER);
+  const [addUser, { loading, data, error }] = useMutation(REGISTER_USER);
 
   console.log(data);
   function registerUser() {
@@ -21,6 +21,7 @@ function Register(props: any) {
   }
 
   if (loading) return "Loading...";
+  if (error) console.log(JSON.stringify(error, null, 2));
 
   return (
     <div className="form-container">
@@ -77,7 +78,7 @@ function Register(props: any) {
 
 const REGISTER_USER = gql`
   mutation createUser($email: String!, $password: String!) {
-    register(registerInput: { email: $email, password: $password }) {
+    createUser(email: $email, password: $password) {
       email
     }
   }

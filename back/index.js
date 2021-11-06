@@ -17,6 +17,11 @@ db.sequelize
     console.log("sequelize fail", err);
   });
 
+const corsOptions = {
+  origin: "http://localhost:3000",
+  Credential: true,
+};
+
 async function startApolloServer() {
   const app = express();
   const server = new ApolloServer({

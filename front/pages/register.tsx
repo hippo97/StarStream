@@ -28,25 +28,20 @@ function Register(props: any) {
       <form onSubmit={onSubmit} className={loading ? "loading" : ""}>
         <h1>Register</h1>
         <input
-          label="Username"
           placeholder="Username.."
           name="username"
           type="text"
           value={values.username}
-          error={errors.username ? true : false}
           onChange={onChange}
         />
         <input
-          label="Email"
           placeholder="Email.."
           name="email"
           type="email"
           value={values.email}
-          error={errors.email ? true : false}
           onChange={onChange}
         />
         <input
-          label="Password"
           placeholder="Password.."
           name="password"
           type="password"

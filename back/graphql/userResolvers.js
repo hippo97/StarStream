@@ -75,7 +75,9 @@ const resolvers = {
         }
       );
 
-      return updateUser;
+      const USER = await User.findOne({ where: { email: args.email } });
+
+      return USER;
     },
     logout: async (_, __, context) => {
       if (context?.token) {

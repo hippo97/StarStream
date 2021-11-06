@@ -1,34 +1,9 @@
 import React, { useEffect, useState } from "react";
-import {
-  gql,
-  useMutation,
-  useQuery,
-  makeVar,
-  InMemoryCache,
-} from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import Router from "next/router";
 
+import { currentUserVar, GET_CURRENT_USER } from "../lib/cache";
 import { useForm } from "../utils/hooks";
-
-const GET_CURRENT_USER = gql`
-  query {
-    user @client
-  }
-`;
-
-const currentUserVar = makeVar(null);
-
-const cache = new InMemoryCache({
-  typePolicies: {
-    Query: {
-      fields: {
-        user() {
-          return currentUserVar();
-        },
-      },
-    },
-  },
-});
 
 const LoginPage = () => {
   const [errors, setErrors] = useState({});
@@ -47,6 +22,8 @@ const LoginPage = () => {
     login({ variables: { email: values.email, password: values.password } });
   }
 
+  console.log(loginData);
+
   useEffect(() => {
     if (loginData) {
       currentUserVar(loginData);
@@ -64,7 +41,8 @@ const LoginPage = () => {
 
   if (currentUser) Router.push("/");
   if (loginResult.loading) return "loading...";
-  if (loginResult.error) return loginResult.error.message;
+  if (loginResult.error)
+    console.log(JSON.stringify(loginResult.error, null, 2));
 
   return (
     <div>
@@ -105,11 +83,9 @@ const LoginPage = () => {
 };
 
 const LOGIN_USER = gql`
-  mutation login($username: String!, $password: String!) {
-    login(username: $username, password: $password) {
-      id
+  mutation login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
       email
-      createdAt
       token
     }
   }

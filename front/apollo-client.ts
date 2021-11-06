@@ -18,7 +18,7 @@ const httpLink = createHttpLink({
 });
 
 const client = new ApolloClient({
-  uri: "http://localhost:3030",
+  link: setContext(contextSetter).concat(httpLink),
   cache: cache,
 });
 
